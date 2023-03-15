@@ -4,6 +4,7 @@ use mdbook::{
     errors::Error,
     preprocess::{CmdPreprocessor, Preprocessor, PreprocessorContext},
 };
+use regex::Regex;
 use std::{io, process};
 
 pub fn make_app() -> Command {
@@ -76,8 +77,16 @@ impl Preprocessor for Embed {
         "embed-preprocessor"
     }
 
-    fn run(&self, _ctx: &PreprocessorContext, book: Book) -> Result<Book, Error> {
-        dbg!("mdbook-embed is running");
+    fn run(&self, _ctx: &PreprocessorContext, mut book: Book) -> Result<Book, Error> {
+        let re = Regex::new(r"(?s)\{\{\s*#embed\s*(?P<url>.*?)\s*\}\}").unwrap();
+        book.for_each_mut(|item| {
+            if let mdbook::book::BookItem::Chapter(chap) = item {
+                chap.content = re.replace_all(&chap.content, |caps: &regex::Captures| {
+                    let url = caps.name("url").unwrap().as_str().to_owned();
+                    format!("<a href=\"{url}\">{url}</a>")
+                }).to_string();
+            }
+        });
         Ok(book)
     }
 }
