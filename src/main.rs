@@ -20,7 +20,7 @@ fn main() {
     let matches = make_app().get_matches();
 
     // Users will want to construct their own preprocessor here
-    let preprocessor = Embed::default();
+    let preprocessor = Embed::new();
 
     if let Some(sub_args) = matches.subcommand_matches("supports") {
         handle_supports(&preprocessor, sub_args);
@@ -63,8 +63,13 @@ fn handle_supports(pre: &dyn Preprocessor, sub_args: &ArgMatches) -> ! {
     }
 }
 
-#[derive(Default)]
 struct Embed;
+
+impl Embed {
+    fn new() -> Embed {
+        Embed
+    }
+}
 
 impl Preprocessor for Embed {
     fn name(&self) -> &str {
@@ -72,6 +77,7 @@ impl Preprocessor for Embed {
     }
 
     fn run(&self, _ctx: &PreprocessorContext, book: Book) -> Result<Book, Error> {
+        dbg!("mdbook-embed is running");
         Ok(book)
     }
 }
