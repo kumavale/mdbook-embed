@@ -78,12 +78,17 @@ impl Preprocessor for Embed {
     }
 
     fn run(&self, _ctx: &PreprocessorContext, mut book: Book) -> Result<Book, Error> {
-        let re = Regex::new(r"(?s)\{\{\s*#embed\s*(?P<url>.*?)\s*\}\}").unwrap();
+        let embed_re = Regex::new(r".*\{\{\s*#embed\s*(?P<url>.*)\s*\}\}").unwrap();
+        let youtube_re = Regex::new(r".+youtube\.com.+v=(.*)").unwrap();
         book.for_each_mut(|item| {
             if let mdbook::book::BookItem::Chapter(chap) = item {
-                chap.content = re.replace_all(&chap.content, |caps: &regex::Captures| {
+                chap.content = embed_re.replace_all(&chap.content, |caps: &regex::Captures| {
                     let url = caps.name("url").unwrap().as_str().to_owned();
-                    format!("<a href=\"{url}\">{url}</a>")
+                    if let Some(cap) = youtube_re.captures_iter(&url).next() {
+                        format!("<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/{}\"></iframe>", &cap[1])
+                    } else {
+                        format!("<a href=\"{url}\">{url}</a>")
+                    }
                 }).to_string();
             }
         });
