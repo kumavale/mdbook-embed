@@ -1,5 +1,6 @@
 # mdbook-embed
 
+[![Actions Status](https://github.com/kumavale/mdbook-embed/workflows/CI/badge.svg)](https://github.com/kumavale/mebook-embed/actions)
 [![Crates.io](https://img.shields.io/crates/v/mdbook-embed.svg)](https://crates.io/crates/mdbook-embed)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
 
