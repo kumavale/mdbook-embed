@@ -2,6 +2,12 @@
 name = "mdbook-embed"
 version = "0.1.0"
 edition = "2021"
+authors = ["kumavale"]
+description = "A preprocessor that simplifies embedded URL"
+license = "MIT"
+repository = "https://github.com/kumavale/mdbook-embed"
+readme = "README.md"
+keywords = ["mdbook", "markdown"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
