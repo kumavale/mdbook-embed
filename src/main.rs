@@ -64,6 +64,8 @@ fn handle_supports(pre: &dyn Preprocessor, sub_args: &ArgMatches) -> ! {
     }
 }
 
+const CLASS_YOUTUBE: &str = "mdbook-embed-youtube";
+
 struct Embed;
 
 impl Embed {
@@ -85,7 +87,7 @@ impl Preprocessor for Embed {
                 chap.content = embed_re.replace_all(&chap.content, |caps: &regex::Captures| {
                     let url = caps.name("url").unwrap().as_str().to_owned();
                     if let Some(cap) = youtube_re.captures_iter(&url).next() {
-                        format!("<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/{}\"></iframe>", &cap[1])
+                        format!("<iframe class=\"{CLASS_YOUTUBE}\" width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/{}\"></iframe>", &cap[1])
                     } else {
                         format!("<a href=\"{url}\">{url}</a>")
                     }
