@@ -1,4 +1,4 @@
-use clap::{Arg, ArgMatches, Command};
+use clap::{Arg, ArgMatches, Command, crate_version};
 use mdbook::{
     book::Book,
     errors::Error,
@@ -10,6 +10,7 @@ use std::{io, process};
 pub fn make_app() -> Command {
     Command::new("embed-preprocessor")
         .about("A mdbook preprocessor which import embed anything")
+        .version(crate_version!())
         .subcommand(
             Command::new("supports")
                 .arg(Arg::new("renderer").required(true))
