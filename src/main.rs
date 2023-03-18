@@ -1,4 +1,4 @@
-use clap::{Arg, ArgMatches, Command, crate_version};
+use clap::{Arg, ArgMatches, Command, crate_name, crate_version};
 use mdbook::{
     book::Book,
     errors::Error,
@@ -8,7 +8,7 @@ use regex::Regex;
 use std::{io, process};
 
 pub fn make_app() -> Command {
-    Command::new("embed-preprocessor")
+    Command::new(crate_name!())
         .about("A mdbook preprocessor which import embed anything")
         .version(crate_version!())
         .subcommand(
