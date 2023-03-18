@@ -1,10 +1,11 @@
-use clap::{Arg, ArgMatches, Command, crate_name, crate_version};
+mod embed;
+
+use crate::embed::*;
+use clap::{crate_name, crate_version, Arg, ArgMatches, Command};
 use mdbook::{
-    book::Book,
     errors::Error,
-    preprocess::{CmdPreprocessor, Preprocessor, PreprocessorContext},
+    preprocess::{CmdPreprocessor, Preprocessor},
 };
-use regex::Regex;
 use std::{io, process};
 
 pub fn make_app() -> Command {
@@ -62,39 +63,5 @@ fn handle_supports(pre: &dyn Preprocessor, sub_args: &ArgMatches) -> ! {
         process::exit(0);
     } else {
         process::exit(1);
-    }
-}
-
-const CLASS_YOUTUBE: &str = "mdbook-embed-youtube";
-
-struct Embed;
-
-impl Embed {
-    fn new() -> Embed {
-        Embed
-    }
-}
-
-impl Preprocessor for Embed {
-    fn name(&self) -> &str {
-        "embed-preprocessor"
-    }
-
-    fn run(&self, _ctx: &PreprocessorContext, mut book: Book) -> Result<Book, Error> {
-        let embed_re = Regex::new(r".*\{\{\s*#embed\s*(?P<url>.*)\s*\}\}").unwrap();
-        let youtube_re = Regex::new(r".+youtube\.com.+v=(.*)").unwrap();
-        book.for_each_mut(|item| {
-            if let mdbook::book::BookItem::Chapter(chap) = item {
-                chap.content = embed_re.replace_all(&chap.content, |caps: &regex::Captures| {
-                    let url = caps.name("url").unwrap().as_str().to_owned();
-                    if let Some(cap) = youtube_re.captures_iter(&url).next() {
-                        format!("<iframe class=\"{CLASS_YOUTUBE}\" width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/{}\"></iframe>", &cap[1])
-                    } else {
-                        format!("<a href=\"{url}\">{url}</a>")
-                    }
-                }).to_string();
-            }
-        });
-        Ok(book)
     }
 }
