@@ -5,8 +5,9 @@ use mdbook::{
 };
 use regex::Regex;
 
-const CLASS_TWITTER: &str = "mdbook-embed-twitter";
-const CLASS_YOUTUBE: &str = "mdbook-embed-youtube";
+const CLASS_INSTAGRAM: &str = "mdbook-embed-instagram";
+const CLASS_TWITTER:   &str = "mdbook-embed-twitter";
+const CLASS_YOUTUBE:   &str = "mdbook-embed-youtube";
 
 pub struct Embed;
 
@@ -25,6 +26,7 @@ impl Preprocessor for Embed {
         let embed_re = Regex::new(r".*\{\{\s*#embed\s*(?P<url>.*)\s*\}\}").unwrap();
         let youtube_re = Regex::new(r".+youtube\.com.+v=(.*)").unwrap();
         let twitter_re = Regex::new(r"(https://twitter\.com.+)").unwrap();
+        let instagram_re = Regex::new(r"(https://www.instagram\.com.+)").unwrap();
         book.for_each_mut(|item| {
             if let mdbook::book::BookItem::Chapter(chap) = item {
                 chap.content = embed_re.replace_all(&chap.content, |caps: &regex::Captures| {
@@ -36,6 +38,11 @@ impl Preprocessor for Embed {
                                        <a href="{}"></a>
                                    </blockquote>
                                    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>"#, &cap[1])
+                    } else if let Some(cap) = instagram_re.captures_iter(&url).next() {
+                        format!(r#"<blockquote class="instagram-media {CLASS_INSTAGRAM}" style="max-width:658px; width:99.375%;">
+                                       <a href="{}" target="_blank"></a>
+                                   </blockquote>
+                                   <script async defer src="//platform.instagram.com/en_US/embeds.js"></script>"#, &cap[1])
                     } else {
                         format!("<a href=\"{url}\">{url}</a>")
                     }
