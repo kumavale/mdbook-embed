@@ -11,7 +11,7 @@ A preprocessor that simplifies embedded URL.
 It turns this:
 
 ```md
-{{#embed https://www.youtube.com/watch?v=d66B35sT1gQ}}
+{{#embed https://www.youtube.com/watch?v=d66B35sT1gQ }}
 ```
 
 into:
@@ -37,6 +37,6 @@ Then add the following to `book.toml`:
 ## Support services
 
 - [x] YouTube
-- [ ] Twitter
-- [ ] Instagram
+- [x] Twitter
+- [x] Instagram
 
