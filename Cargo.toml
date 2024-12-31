@@ -12,7 +12,7 @@ keywords = ["mdbook", "markdown"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-clap = "4.*"
-mdbook = "0.4.*"
-serde_json = "1.*"
-regex = "1"
+clap = "4.5.23"
+mdbook = "0.4.43"
+serde_json = "1.0.134"
+regex = "1.11.1"
